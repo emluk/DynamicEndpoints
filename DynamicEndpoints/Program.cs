@@ -26,6 +26,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseRouting();
-app.UseEndpoints(endpoint => endpoint.MapControllerRoute("blergh", "{controller}"));
+app.UseEndpoints(endpoint => endpoint.MapControllerRoute("default", "{controller}"));
 
 app.Run();
