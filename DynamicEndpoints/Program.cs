@@ -1,4 +1,5 @@
 using DynamicEndpoints.Miscellaneous;
+using DynamicEndpoints.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IActionDescriptorChangeProvider>(ActionDescriptorChangeProvider.Instance);
 builder.Services.AddSingleton(ActionDescriptorChangeProvider.Instance);
+builder.Services.AddHostedService<AssemblyPreloaderHostedService>();
 
 var app = builder.Build();
 

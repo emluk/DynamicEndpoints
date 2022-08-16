@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Emit;
 
 namespace DynamicEndpoints.Miscellaneous;
 
-public class AssemblyProvider
+public static class AssemblyProvider
 {
     public static Assembly CreateOrGetAssembly(string name, out List<Diagnostic> diagnostic, string templatePath = "Templates/default.txt")
     {
@@ -70,5 +70,16 @@ public class AssemblyProvider
         // replace placeholders in template
         var code = content.Replace("{PLACEHOLDER}", name);
         return code;
+    }
+
+    public static List<Assembly> GetAllGeneratedAssemblies()
+    {
+        var assemblies = new List<Assembly>();
+        Directory.GetFiles("GeneratedEndpointAssemblies/", "*.dll").ToList().ForEach(file =>
+        {
+            
+            assemblies.Add(Assembly.LoadFrom(file));
+        });
+        return assemblies;
     }
 }
