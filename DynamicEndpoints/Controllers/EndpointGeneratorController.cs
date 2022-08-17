@@ -1,8 +1,6 @@
 using DynamicEndpoints.Miscellaneous;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace DynamicEndpoints.Controllers;
 
@@ -28,6 +26,7 @@ public class EndpointGeneratorController : ControllerBase
         if (assembly == null)
         {
             var errors = string.Join("\n", diagnostics.Select(diagnostic => diagnostic.ToString() ));
+            _logger.LogError($"Compiling new endpoint '{name}' failed with diagnostics:\n{errors}");
             return BadRequest(errors);
         }
         _partManager.ApplicationParts.Add(new AssemblyPart(assembly));
@@ -35,7 +34,7 @@ public class EndpointGeneratorController : ControllerBase
         // notify ASP net of the changes
         ActionDescriptorChangeProvider.Instance.HasChanged = true;
         ActionDescriptorChangeProvider.Instance.TokenSource.Cancel();
-        
+        _logger.LogInformation($"Added new endpoint {name}");
         return Ok($"Created {name}");
     }
 }
