@@ -1,8 +1,7 @@
+using System.Text.RegularExpressions;
 using DynamicEndpoints.Miscellaneous;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace DynamicEndpoints.Controllers;
 
@@ -22,6 +21,14 @@ public class EndpointGeneratorController : ControllerBase
     [HttpGet]
     public IActionResult Get([FromQuery] string name)
     {
+        //"([a-Z]|[0-9])+";
+        Regex regex = new Regex(@"^([a-z]|[A-Z]|[0-9])+$");
+        if (!regex.IsMatch(name))
+        {
+            return BadRequest(
+                $"{name} is not an allowed name for the endpoint. It can only have alphanumerical characters");
+        }
+        
         var assembly = AssemblyProvider.CreateOrGetAssembly(name, out var diagnostics);
         
         // add assembly to application parts (this adds a new controller in our case)
