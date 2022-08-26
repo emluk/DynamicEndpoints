@@ -1,8 +1,6 @@
-using System.Collections.Immutable;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
 
 namespace DynamicEndpoints.Miscellaneous;
 
@@ -77,7 +75,6 @@ public static class AssemblyProvider
         var assemblies = new List<Assembly>();
         Directory.GetFiles("GeneratedEndpointAssemblies/", "*.dll").ToList().ForEach(file =>
         {
-            
             assemblies.Add(Assembly.LoadFrom(file));
         });
         return assemblies;
